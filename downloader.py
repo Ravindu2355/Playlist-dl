@@ -42,3 +42,13 @@ def generate_thumbnail(video_path):
     image = Image.fromarray(frame)
     image.save(thumbnail_path, "JPEG")
     return thumbnail_path
+
+
+def compress_video(video_path):
+    """Compress the video to make it streamable for Telegram (optional)."""
+    temp_compressed_path = tempfile.mktemp(suffix='.mp4')
+    with VideoFileClip(video_path) as clip:
+        # Resize to 720p for streamability and compression
+        clip_resized = clip.resize(height=720)
+        clip_resized.write_videofile(temp_compressed_path, codec="libx264", audio_codec="aac", threads=4)
+    return temp_compressed_path
