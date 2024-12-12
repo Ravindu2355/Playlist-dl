@@ -1,21 +1,35 @@
 import os
 import tempfile
-from pytube import YouTube, Playlist
 from moviepy.editor import VideoFileClip
+import yt_dlp
 
 def download_video(url):
-    """Download a single YouTube video."""
-    yt = YouTube(url)
-    stream = yt.streams.get_highest_resolution()
+    """Download a single YouTube video using yt-dlp."""
     temp_dir = tempfile.mkdtemp()
-    file_path = os.path.join(temp_dir, f"{yt.title}.mp4")
-    stream.download(output_path=temp_dir, filename=f"{yt.title}.mp4")
-    return file_path
+    output_path = os.path.join(temp_dir, "%(title)s.%(ext)s")
+
+    ydl_opts = {
+        'format': 'bestvideo+bestaudio/best',
+        'outtmpl': output_path,
+        'merge_output_format': 'mp4',
+        'quiet': True,
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info_dict = ydl.extract_info(url, download=True)
+        return ydl.prepare_filename(info_dict)
 
 def get_playlist_videos(url):
-    """Get all video URLs from a YouTube playlist."""
-    playlist = Playlist(url)
-    return playlist.video_urls
+    """Get all video URLs from a YouTube playlist using yt-dlp."""
+    ydl_opts = {
+        'quiet': True,
+        'extract_flat': True,
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        playlist_dict = ydl.extract_info(url, download=False)
+        return [entry['url'] for entry in playlist_dict['entries']]
+
 
 def generate_thumbnail(video_path):
     """Generate a thumbnail for the video using MoviePy."""
