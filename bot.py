@@ -1,4 +1,4 @@
-import os
+import os, json
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from downloader import download_video, get_playlist_videos, generate_thumbnail, compress_video
