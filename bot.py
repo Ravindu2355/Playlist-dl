@@ -17,7 +17,7 @@ async def start(client, message: Message):
         "Send a YouTube video or playlist link to download as streamable Telegram videos."
     )
 
-@app.on_message(filters.text & ~filters.command)
+@app.on_message(filters.text & ~filters.command())
 async def download_handler(client, message: Message):
     url = message.text.strip()
 
