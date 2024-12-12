@@ -4,9 +4,9 @@ from pyrogram.types import Message
 from downloader import download_video, get_playlist_videos
 
 # Bot configuration
-API_ID = int(os.getenv("API_ID"))
-API_HASH = os.getenv("API_HASH")
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+API_ID = int(os.getenv("apiid"))
+API_HASH = os.getenv("apihash")
+BOT_TOKEN = os.getenv("tk")
 
 app = Client("youtube_downloader_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
