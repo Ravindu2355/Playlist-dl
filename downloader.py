@@ -3,7 +3,7 @@ import tempfile
 from moviepy.editor import VideoFileClip
 import yt_dlp
 
-cookies_file = "cookies.json"  # Replace with the actual path to your cookies file
+cookies_file = "cookies.txt"  # Replace with the actual path to your cookies file
 
 
 def download_video(url):
