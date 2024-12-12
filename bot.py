@@ -1,7 +1,7 @@
 import os
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from downloader import download_video, get_playlist_videos, generate_thumbnail
+from downloader import download_video, get_playlist_videos, generate_thumbnail, compress_video
 
 # Bot configuration
 API_ID = int(os.getenv("apiid"))
@@ -32,10 +32,13 @@ async def download_handler(client, message: Message):
                 try:
                     file_path = download_video(video_url)
                     thumbnail_path = generate_thumbnail(file_path)
+                    await prs_msg.edit_text("compressing video...")
+                    compressed_video_path = compress_video(file_path)
+                    
                     await prs_msg.edit_text(f"Uploading video {idx}...")
                     await client.send_video(
                         chat_id=message.chat.id,
-                        video=file_path,
+                        video=compressed_video_path,
                         thumb=thumbnail_path,
                         caption=f"Video {idx} from playlist.",
                         supports_streaming=True,
@@ -53,10 +56,13 @@ async def download_handler(client, message: Message):
         try:
             file_path = download_video(url)
             thumbnail_path = generate_thumbnail(file_path)
+            await st_msg.edit_text("compressing video...")
+            compressed_video_path = compress_video(file_path)
+
             await st_msg.edit_text("Uploading video...")
             await client.send_video(
                 chat_id=message.chat.id,
-                video=file_path,
+                video=compressed_video_path,
                 thumb=thumbnail_path,
                 caption="Here is your video.",
                 supports_streaming=True,
