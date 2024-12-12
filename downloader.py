@@ -3,6 +3,9 @@ import tempfile
 from moviepy.editor import VideoFileClip
 import yt_dlp
 
+cookies_file = "cookies.json"  # Replace with the actual path to your cookies file
+
+
 def download_video(url):
     """Download a single YouTube video using yt-dlp."""
     temp_dir = tempfile.mkdtemp()
@@ -13,6 +16,7 @@ def download_video(url):
         'outtmpl': output_path,
         'merge_output_format': 'mp4',
         'quiet': True,
+        'cookiefile': cookies_file
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -24,6 +28,7 @@ def get_playlist_videos(url):
     ydl_opts = {
         'quiet': True,
         'extract_flat': True,
+        'cookiefile': cookies_file
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
