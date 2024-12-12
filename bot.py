@@ -17,6 +17,34 @@ async def start(client, message: Message):
         "Send a YouTube video or playlist link to download as streamable Telegram videos."
     )
 
+@app.on_message(filters.command("setcookie"))
+async def set_cookie(client, message: Message):
+    """Sets cookies for yt-dlp using a cookie string."""
+    cookie_string = message.text.strip()[10:]  # Remove the command part (/setcookie)
+    if not cookie_string:
+        await message.reply_text("❌ Please provide a cookie string.")
+        return
+    
+    # Split the cookie string by '; ' to get individual cookies
+    cookies_dict = {}
+    cookies = cookie_string.split("; ")
+    for cookie in cookies:
+        try:
+            key, value = cookie.split("=")
+            cookies_dict[key] = value
+        except ValueError:
+            continue  # Skip any malformed cookies
+
+    if cookies_dict:
+        # Save cookies as a JSON file
+        cookie_file = "cookies.json"
+        with open(cookie_file, "w") as f:
+            json.dump(cookies_dict, f)
+        
+        await message.reply_text("✅ Cookies have been saved successfully!")
+    else:
+        await message.reply_text("❌ Invalid cookie string format.")
+
 @app.on_message(filters.text)
 async def download_handler(client, message: Message):
     url = message.text.strip()
