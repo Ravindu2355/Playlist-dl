@@ -8,3 +8,5 @@ Jinja2==3.0.3
 werkzeug==2.0.2
 itsdangerous==2.0.1
 flask_cors
+moviepy==1.0.3
+Pillow==9.4.0
